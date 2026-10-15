@@ -29,7 +29,7 @@ function updateTooltips() {
             attr_pos = hover_tooltip.getAttribute('tooltip-pos') || TOOLTIP_CONFING.def_pos,
             text_align = hover_tooltip.getAttribute('tooltip-text-align') || TOOLTIP_CONFING.def_text_align;
 
-            tooltip_div.innerHTML = attr_html
+            if (tooltip_div.__h !== attr_html) { tooltip_div.innerHTML = attr_html; tooltip_div.__h = attr_html }
 
             let ht_rect = hover_tooltip.getBoundingClientRect()
             let t_rect = tooltip_div.getBoundingClientRect()
@@ -60,13 +60,15 @@ function updateTooltips() {
             style['text-align'] = text_align
         }
     } else {
+        // nothing to show: skip all DOM writes if already hidden
+        if (style.display === 'none') return
         style.display = 'none';
         style.top = 0;
         style.left = 0;
         tt_time = 0
     }
 
-    style.opacity = tt_time;
+    if (style.opacity !== String(tt_time)) style.opacity = tt_time;
 }
 
 function updateTooltipOnChange() {
@@ -94,6 +96,15 @@ function setupTooltips() {
     updateTooltipOnChange()
 
     setInterval(updateTooltips,1000/30)
+
+    // On touch screens "mouseleave" never fires, so a tapped tooltip stayed
+    // on screen forever (and kept forcing layouts 30 times per second).
+    // Close it on the next touch outside, or when scrolling.
+    const closeTip = e => {
+        if (hover_tooltip && !(e && e.target && hover_tooltip.contains(e.target))) hover_tooltip = null
+    }
+    document.addEventListener('touchstart', closeTip, { passive: true })
+    document.addEventListener('scroll', () => { hover_tooltip = null }, { passive: true, capture: true })
 
     // setInterval(updateTooltipOnChange,100)
 }

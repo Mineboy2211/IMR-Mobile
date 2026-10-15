@@ -105,8 +105,10 @@
         document.body.classList.toggle('m-noapp', !!(tmp.el.app && tmp.el.app.el.style.display === 'none'))
         if (!document.body.classList.contains('m-ui')) return
         try {
-            $('m_mass').textContent = formatMass(player.mass)
-            $('m_gain').textContent = tmp.massGain ? '+' + formatMass(tmp.massGain.mul(tmp.preQUGlobalSpeed || 1)) + '/s' : ''
+            const a = formatMass(player.mass), b = tmp.massGain ? '+' + formatMass(tmp.massGain.mul(tmp.preQUGlobalSpeed || 1)) + '/s' : ''
+            const ea = $('m_mass'), eb = $('m_gain')
+            if (ea.textContent !== a) ea.textContent = a
+            if (eb.textContent !== b) eb.textContent = b
         } catch (e) {}
     }
 

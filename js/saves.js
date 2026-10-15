@@ -579,7 +579,7 @@ function loadGame(start=true, gotNaN=false) {
         setInterval(loop, 1000/FPS)
         setInterval(updateStarsScreenHTML, 1000/FPS)
         treeCanvas()
-        setInterval(drawTreeHTML, 10)
+        setInterval(drawTreeHTML, 50)
         setInterval(checkNaN,1000)
         setInterval(updateOneSec,1000)
 

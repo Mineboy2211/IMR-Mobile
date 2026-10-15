@@ -155,7 +155,7 @@ body.m-noapp #m_menu_btn { bottom: 10px !important; }
    ===================================================== */
 :root {
 	--m-bg1: #0b0d1a; --m-bg2: #151a33;
-	--m-glass: rgba(18, 20, 38, .78);
+	--m-glass: rgba(16, 18, 36, .96);
 	--m-line: rgba(140, 150, 255, .28);
 	--m-accent: #8b7bff; --m-accent2: #3fd8ff;
 	--m-text: #e9ecff; --m-dim: #9aa3c7;
@@ -172,7 +172,6 @@ body.m-ui #app {
 /* Top bar */
 body.m-ui #m_top {
 	height: 54px; background: var(--m-glass);
-	-webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
 	border-bottom: 1px solid var(--m-line);
 	box-shadow: 0 6px 24px rgba(0,0,0,.45);
 	padding: 0 10px; gap: 8px;
@@ -214,7 +213,6 @@ body.m-ui #main_app { padding-top: 58px; }
 #m_menu {
 	width: 260px; padding: 10px; border-radius: 18px;
 	background: var(--m-glass); border: 1px solid var(--m-line);
-	-webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
 	box-shadow: 0 18px 40px rgba(0,0,0,.6);
 	color: var(--m-text);
 	transform-origin: bottom right;
@@ -242,7 +240,6 @@ body.m-ui #main_app { padding-top: 58px; }
 #m_toast {
 	top: 64px; border-radius: 14px; padding: 10px 18px;
 	background: var(--m-glass); border: 1px solid rgba(126,242,176,.55); color: var(--m-text);
-	-webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
 	box-shadow: 0 10px 30px rgba(0,0,0,.5);
 }
 
@@ -250,7 +247,6 @@ body.m-ui #main_app { padding-top: 58px; }
 body.m-ui #tabs {
 	height: 76px !important; padding: 4px 64px 4px 6px; gap: 4px;
 	background: var(--m-glass); border-top: 1px solid var(--m-line);
-	-webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
 	box-shadow: 0 -8px 24px rgba(0,0,0,.45);
 }
 body.m-ui #tabs .btn_tab {
@@ -281,7 +277,6 @@ body.m-ui #tabs .btn_tab > div { font-size: 10.5px !important; letter-spacing: .
 /* Sub-tab chips */
 body.m-ui #stabs_div {
 	background: linear-gradient(180deg, rgba(11,13,26,.95), rgba(11,13,26,.75));
-	-webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
 	margin: 0 -6px; padding: 0 6px; border-bottom: 1px solid rgba(255,255,255,.05);
 }
 body.m-ui .stab_btn { gap: 6px; padding: 8px 0; }
@@ -300,7 +295,6 @@ body.m-ui .main-line { background: linear-gradient(90deg, transparent, var(--m-l
 body.m-ui #resources_table {
 	top: 54px; bottom: 76px; padding: 8px; box-sizing: border-box;
 	background: var(--m-glass); border-left: 1px solid var(--m-line);
-	-webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
 	box-shadow: -12px 0 30px rgba(0,0,0,.5);
 	border-radius: 18px 0 0 18px;
 	transition: transform .25s cubic-bezier(.2,.8,.2,1);
@@ -309,7 +303,7 @@ body.m-ui #resources_table > div {
 	background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06);
 	border-radius: 12px; padding: 4px 6px; box-sizing: border-box; margin: 0 0 6px; height: 50px;
 }
-body.m-ui.m-res-open #m_scrim { background: rgba(5,6,15,.55); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+body.m-ui.m-res-open #m_scrim { background: rgba(5,6,15,.55);}
 
 /* Game buttons: rounder, softer */
 body.m-ui .btn { border-radius: 10px; }
@@ -335,3 +329,19 @@ body.m-ui #tabs .btn_tab { margin: 0 2px; }
 body.m-ui #m_top .m_mass { text-align: left; }
 body.m-ui #m_top .m_mass { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
 body.m-ui #m_top .m_mass > * { display: block; text-align: left; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+
+/* ===== Performance ===== */
+/* Blur effects were removed: they are very expensive on phones. Bars are now
+   opaque, and each layer gets its own GPU layer so scrolling stays smooth. */
+body.m-ui #m_top, body.m-ui #tabs, #m_menu_btn {
+	transform: translateZ(0); will-change: transform;
+}
+body.m-ui #main_app { contain: layout paint; overscroll-behavior: contain; }
+body.m-ui #tab_frames { contain: layout; }
+body.m-ui #app { background-attachment: scroll; }
+@media (prefers-reduced-motion: reduce) {
+	#m_menu.open { animation: none; }
+	body.m-ui #resources_table { transition: none; }
+}
+body.m-ui #resources_table { background: linear-gradient(180deg, #14172d, #0e1022); }
+body.m-ui #m_top, body.m-ui #tabs, #m_menu { background-color: #111327; }
