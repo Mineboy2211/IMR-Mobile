@@ -345,3 +345,7 @@ body.m-ui #app { background-attachment: scroll; }
 }
 body.m-ui #resources_table { background: linear-gradient(180deg, #14172d, #0e1022); }
 body.m-ui #m_top, body.m-ui #tabs, #m_menu { background-color: #111327; }
+
+/* Tooltips (reset descriptions, etc.) must sit above the drawer, its dimmed
+   backdrop and the bars, otherwise they end up hidden/dimmed behind them. */
+#tooltip-div { z-index: 50 !important; background-color: #0b0d1a !important; box-shadow: 0 8px 24px rgba(0,0,0,.6); max-width: min(360px, 90vw); pointer-events: none; }
